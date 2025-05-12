@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Face() {
+export default function Qris() {
   return (
     <div>
-      hello
+      
     </div>
   )
 }

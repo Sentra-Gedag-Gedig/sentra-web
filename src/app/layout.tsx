@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sentra",
   description: "Sentra",
+  icons: {
+    icon: "/Sentra.svg",
+  },
 };
 
 export default function RootLayout({
