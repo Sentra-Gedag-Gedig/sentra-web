@@ -284,7 +284,6 @@ export function KtpCapture() {
       />
       {/* Canvas tersembunyi untuk memproses frame video */}
       <canvas ref={canvasRef} className="hidden" />
-
       <div className="relative z-10 flex items-center justify-center mb-4">
         <h1
           className="text-xl md:text-2xl font-bold text-center"
@@ -292,7 +291,6 @@ export function KtpCapture() {
           Ambil foto e-KTP
         </h1>
       </div>
-
       {/* Tambahkan div dengan fixed height untuk mencegah pergeseran saat pesan berubah */}
       <div
         className="relative z-10 h-16 flex flex-col items-center justify-center mb-6"
@@ -308,7 +306,6 @@ export function KtpCapture() {
           </span>
         )}
       </div>
-
       {!hasCameraPermission && isConnected && (
         <div className="relative z-10 mb-4">
           <Button
@@ -319,15 +316,14 @@ export function KtpCapture() {
           </Button>
         </div>
       )}
-
       {/* Turunkan placeholder KTP sebanyak 9px dengan menambahkan mt-24 (ganti dari mt-20) */}
       <div
         className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
         aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
         <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
-
-      <div className="relative z-10 mt-6">
+      ~
+      <div className="relative z-10 mt-6 max-w-sm w-full mx-auto">
         <Button
           className="w-full h-12 text-base bg-[#00027d] hover:bg-[#1f2ddc] text-white rounded-lg"
           onClick={captureKtp}
