@@ -19,6 +19,7 @@ export function KtpCapture() {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [hasCameraPermission, setHasCameraPermission] =
     useState<boolean>(false);
+  const [isCapturing, setIsCapturing] = useState<boolean>(false); // State baru untuk status pending
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -160,7 +161,7 @@ export function KtpCapture() {
 
     const connectToWebSocket = () => {
       const ws = new WebSocket(
-        "wss://9e8d-125-160-192-29.ngrok-free.app/api/v1/ktp/ws"
+        `${process.env.NEXT_PUBLIC_WS_URL}/api/v1/ktp/ws`
       );
       wsRef.current = ws;
 
@@ -243,27 +244,62 @@ export function KtpCapture() {
       return "Menunggu izin kamera...";
     }
 
+    if (isCapturing) {
+      return "Sedang mengambil foto...";
+    }
+
     return message;
   };
 
-  const captureKtp = () => {
-    // Skip if we're not in browser environment
+  const captureKtp = async () => {
+    // Skip if we're not in browser environment or canvasRef is not available
     if (typeof window === "undefined" || !canvasRef.current) return;
 
+    // Set loading state
+    setIsCapturing(true);
+
     // Ambil data blob dari canvas
-    canvasRef.current.toBlob((blob) => {
-      if (!blob) return;
-
-      // Di sini Anda bisa mengirim blob ke server atau melakukan navigasi ke halaman berikutnya
-      let successUrl = "http://localhost:3000/ktp-success";
-      if (returnApp) {
-        successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
+    canvasRef.current.toBlob(async (blob) => {
+      if (!blob) {
+        setIsCapturing(false);
+        return;
       }
 
-      if (typeof window !== "undefined") {
-        console.log("Redirecting to:", successUrl);
+      // Create FormData and append the image (Directly append the blob with the name and type)
+      const formData = new FormData();
+      formData.append("image", blob, "ktp.jpeg"); // Blob, with name as the third parameter
+      console.log(formData);
+      try {
+        // Kirim FormData ke API
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/ktp/extract`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const responseText = await response.text();
+        console.log("Response from API:", responseText);
+
+        // Handle API response (success or error)
+        if (response.ok) {
+          // Redirect ke halaman sukses jika berhasil
+          let successUrl = "http://localhost:3000/ktp-success";
+          if (returnApp) {
+            successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
+          }
+
+          console.log("Redirecting to:", successUrl);
+          window.location.href = successUrl; // Hanya berlaku di browser
+        } else {
+          throw new Error("Upload failed: " + responseText);
+        }
+      } catch (error) {
+        console.error("Error during KTP capture:", error);
+        setErrorMessage("Gagal mengunggah KTP. Silakan coba lagi.");
+        setIsCapturing(false); // Reset status ketika error
       }
-      window.location.href = successUrl;
     }, "image/jpeg");
   };
 
@@ -297,7 +333,7 @@ export function KtpCapture() {
         <p className="text-base md:text-lg text-center">
           {getInstructionText()}
         </p>
-        {isAnalyzing && isConnected && hasCameraPermission && (
+        {isAnalyzing && isConnected && hasCameraPermission && !isCapturing && (
           <span className="flex items-center justify-center mt-2">
             <span>Analyzing...</span>
             <Loader2 className="w-4 h-4 ml-2 animate-spin" />
@@ -319,14 +355,21 @@ export function KtpCapture() {
         aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
         <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
-      ~
+
       <div className="relative z-10 mt-6 max-w-sm w-full mx-auto">
         <Button
           className="w-full h-12 text-base bg-[#00027d] hover:bg-[#1f2ddc] text-white rounded-lg"
           onClick={captureKtp}
-          disabled={(message !== "OK" && isConnected) || !hasCameraPermission}
+          disabled={!hasCameraPermission || isCapturing}
           aria-label="Tombol untuk mengambil foto KTP ketika posisi sudah tepat">
-          {message === "OK" ? "Ambil Foto" : "Tunggu KTP Terdeteksi..."}
+          {isCapturing ? (
+            <span className="flex items-center justify-center">
+              <span>Memproses...</span>
+              <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+            </span>
+          ) : (
+            "Ambil Foto"
+          )}
         </Button>
       </div>
     </div>

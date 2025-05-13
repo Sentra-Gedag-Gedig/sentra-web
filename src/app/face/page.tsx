@@ -144,7 +144,10 @@ export default function FacePositioningPage() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const ws = new WebSocket("ws://localhost:5050/api/v1/face/ws");
+    const ws = new WebSocket(
+      `${process.env.NEXT_PUBLIC_WS_URL}/api/v1/face/ws`
+    );
+    console.log(ws);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -221,7 +224,7 @@ export default function FacePositioningPage() {
         setIsSpeaking(false);
       }
     };
-  }, [sendFrames]);
+  }, []);
 
   const getInstructionText = () => {
     if (!isConnected) {

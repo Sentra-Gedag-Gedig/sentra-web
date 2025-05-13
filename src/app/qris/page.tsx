@@ -13,7 +13,7 @@ export default function QrisCapture() {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [returnApp, setReturnApp] = useState<string | null>(null);
+  // const [returnApp, setReturnApp] = useState<string | null>(null);
   const [lastInstructionTime, setLastInstructionTime] = useState<number>(0);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -39,7 +39,7 @@ export default function QrisCapture() {
     const returnTo = params.get("returnTo");
 
     if (returnTo) {
-      setReturnApp(returnTo);
+      // setReturnApp(returnTo);
     }
   }, []);
 
@@ -91,23 +91,23 @@ export default function QrisCapture() {
     }
   };
 
-  const toggleFlashlight = async () => {
-    if (!streamRef.current) return;
+  // const toggleFlashlight = async () => {
+  //   if (!streamRef.current) return;
 
-    try {
-      const track = streamRef.current.getVideoTracks()[0];
-      if (!track) return;
+  //   try {
+  //     const track = streamRef.current.getVideoTracks()[0];
+  //     if (!track) return;
 
-      const capabilities = track.getCapabilities();
-      if (!(capabilities as any).torch) {
-        setErrorMessage("Flashlight tidak didukung pada perangkat ini");
-        return;
-      }
-    } catch (err) {
-      console.error("Error toggling flashlight:", err);
-      setErrorMessage("Tidak dapat mengaktifkan flashlight");
-    }
-  };
+  //     const capabilities = track.getCapabilities();
+  //     if (!(capabilities as any).torch) {
+  //       setErrorMessage("Flashlight tidak didukung pada perangkat ini");
+  //       return;
+  //     }
+  //   } catch (err) {
+  //     console.error("Error toggling flashlight:", err);
+  //     setErrorMessage("Tidak dapat mengaktifkan flashlight");
+  //   }
+  // };
 
   const openGallery = () => {
     const input = document.createElement("input");
@@ -226,8 +226,9 @@ export default function QrisCapture() {
 
     const connectToWebSocket = () => {
       const ws = new WebSocket(
-        "wss://9e8d-125-160-192-29.ngrok-free.app/api/v1/qris/ws"
+        `${process.env.NEXT_PUBLIC_WS_URL}/api/v1/qris/ws`
       );
+      console.log(ws);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -312,26 +313,26 @@ export default function QrisCapture() {
     return message;
   };
 
-  const captureQris = () => {
-    // Skip if we're not in browser environment
-    if (typeof window === "undefined" || !canvasRef.current) return;
+  // const captureQris = () => {
+  //   // Skip if we're not in browser environment
+  //   if (typeof window === "undefined" || !canvasRef.current) return;
 
-    // Ambil data blob dari canvas
-    canvasRef.current.toBlob((blob) => {
-      if (!blob) return;
+  //   // Ambil data blob dari canvas
+  //   canvasRef.current.toBlob((blob) => {
+  //     if (!blob) return;
 
-      // Di sini Anda bisa mengirim blob ke server atau melakukan navigasi ke halaman berikutnya
-      let successUrl = "http://localhost:3000/qris-success";
-      if (returnApp) {
-        successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
-      }
+  //     // Di sini Anda bisa mengirim blob ke server atau melakukan navigasi ke halaman berikutnya
+  //     let successUrl = "http://localhost:3000/qris-success";
+  //     if (returnApp) {
+  //       successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
+  //     }
 
-      if (typeof window !== "undefined") {
-        console.log("Redirecting to:", successUrl);
-      }
-      window.location.href = successUrl;
-    }, "image/jpeg");
-  };
+  //     if (typeof window !== "undefined") {
+  //       console.log("Redirecting to:", successUrl);
+  //     }
+  //     window.location.href = successUrl;
+  //   }, "image/jpeg");
+  // };
 
   // Function to manually request camera access if it wasn't granted automatically
   const handleManualCameraRequest = () => {
