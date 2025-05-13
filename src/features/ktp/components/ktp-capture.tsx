@@ -322,9 +322,9 @@ export function KtpCapture() {
 
       {/* Turunkan placeholder KTP sebanyak 9px dengan menambahkan mt-24 (ganti dari mt-20) */}
       <div
-        className="relative z-10 max-w-md aspect-video rounded-lg border-2 border-[#00027d] overflow-hidden mt-24"
+        className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
         aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
 
       <div className="relative z-10 mt-6">
