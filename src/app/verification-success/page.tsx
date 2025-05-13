@@ -14,7 +14,7 @@ export default function VerificationSuccessPage() {
     // Get URL parameters
     const params = new URLSearchParams(window.location.search);
     const returnTo = params.get("returnTo");
-    ``;
+
     if (returnTo) {
       setReturnApp(returnTo);
     }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/shared/ui/button";
 import { Loader2 } from "lucide-react";
 
 type FaceStatus = "NO_FACE" | "READY" | "ADJUST";
@@ -20,7 +19,6 @@ export default function FacePositioningPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
   const [returnApp, setReturnApp] = useState<string | null>(null);
 
   useEffect(() => {
@@ -223,7 +221,7 @@ export default function FacePositioningPage() {
         setIsSpeaking(false);
       }
     };
-  }, []);
+  }, [sendFrames]);
 
   const getInstructionText = () => {
     if (!isConnected) {
