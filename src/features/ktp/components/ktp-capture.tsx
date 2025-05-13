@@ -299,6 +299,7 @@ export function KtpCapture() {
             deepLink.searchParams.set("nik", data.nik);
             deepLink.searchParams.set("nama", data.nama);
             deepLink.searchParams.set("tanggal_lahir", data.tanggal_lahir);
+            deepLink.searchParams.set("tempat_lahir", data.tempat_lahir);
             deepLink.searchParams.set("jenis_kelamin", data.jenis_kelamin);
             // Tambahkan field lain jika perlu
 
@@ -311,6 +312,7 @@ export function KtpCapture() {
         } else {
           throw new Error("Upload failed: " + responseText);
         }
+        console.log(returnApp);
       } catch (error) {
         console.error("Error during KTP capture:", error);
         setErrorMessage("Gagal mengunggah KTP. Silakan coba lagi.");
