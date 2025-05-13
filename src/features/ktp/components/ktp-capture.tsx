@@ -282,7 +282,6 @@ export function KtpCapture() {
         autoPlay
         aria-hidden="true"
       />
-      {/* Canvas tersembunyi untuk memproses frame video */}
       <canvas ref={canvasRef} className="hidden" />
       <div className="relative z-10 flex items-center justify-center mb-4">
         <h1
@@ -291,7 +290,6 @@ export function KtpCapture() {
           Ambil foto e-KTP
         </h1>
       </div>
-      {/* Tambahkan div dengan fixed height untuk mencegah pergeseran saat pesan berubah */}
       <div
         className="relative z-10 h-16 flex flex-col items-center justify-center mb-6"
         aria-live="assertive"
@@ -316,7 +314,6 @@ export function KtpCapture() {
           </Button>
         </div>
       )}
-      {/* Turunkan placeholder KTP sebanyak 9px dengan menambahkan mt-24 (ganti dari mt-20) */}
       <div
         className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
         aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
