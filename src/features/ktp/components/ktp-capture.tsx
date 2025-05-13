@@ -288,47 +288,52 @@ export function KtpCapture() {
       <div className="relative z-10 flex items-center justify-center mb-4">
         <h1
           className="text-xl md:text-2xl font-bold text-center"
-          aria-label="Halaman pengambilan foto e-KTP">
+          aria-label="Halaman pengambilan foto e-KTP"
+        >
           Ambil foto e-KTP
         </h1>
       </div>
 
-      <p
-        className="relative z-10 text-base md:text-lg text-center mb-6"
+      <div
+        className="relative z-10 text-base md:text-lg text-center mb-6 min-h-[4.5rem]"
         aria-live="assertive"
-        aria-relevant="all">
-        {getInstructionText()}
+        aria-relevant="all"
+      >
+        <p>{getInstructionText()}</p>
         {isAnalyzing && isConnected && hasCameraPermission && (
-          <span className="flex items-center justify-center mt-2">
+          <div className="flex items-center justify-center mt-2">
             <span>Analyzing...</span>
             <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-          </span>
+          </div>
         )}
-      </p>
+      </div>
 
       {!hasCameraPermission && isConnected && (
         <div className="relative z-10 mb-4">
           <Button
             className="w-full h-12 text-base bg-green-600 hover:bg-green-700 text-white rounded-lg"
             onClick={handleManualCameraRequest}
-            aria-label="Berikan izin kamera">
+            aria-label="Berikan izin kamera"
+          >
             Berikan Izin Kamera
           </Button>
         </div>
       )}
 
       <div
-        className="relative z-10 max-w-md aspect-video rounded-lg border-2 border-[#00027d] overflow-hidden mt-20"
-        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
+        className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
+        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini"
+      >
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
 
-      <div className="relative z-10 mt-6">
+      <div className="relative z-10 mt-6 max-w-sm w-full mx-auto">
         <Button
           className="w-full h-12 text-base bg-[#00027d] hover:bg-[#1f2ddc] text-white rounded-lg"
           onClick={captureKtp}
           disabled={(message !== "OK" && isConnected) || !hasCameraPermission}
-          aria-label="Tombol untuk mengambil foto KTP ketika posisi sudah tepat">
+          aria-label="Tombol untuk mengambil foto KTP ketika posisi sudah tepat"
+        >
           {message === "OK" ? "Ambil Foto" : "Tunggu KTP Terdeteksi..."}
         </Button>
       </div>
