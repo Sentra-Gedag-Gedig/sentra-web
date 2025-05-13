@@ -17,6 +17,7 @@ export function KtpCapture() {
   const [lastInstructionTime, setLastInstructionTime] = useState<number>(0);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  const [base64Image, setBase64Image] = useState<string>("");
   const [hasCameraPermission, setHasCameraPermission] =
     useState<boolean>(false);
   const [isCapturing, setIsCapturing] = useState<boolean>(false); // State baru untuk status pending
@@ -252,25 +253,78 @@ export function KtpCapture() {
   };
 
   const captureKtp = async () => {
-    // Skip if we're not in browser environment or canvasRef is not available
-    if (typeof window === "undefined" || !canvasRef.current) return;
-
-    // Set loading state
+    if (
+      typeof window === "undefined" ||
+      !canvasRef.current ||
+      !videoRef.current
+    )
+      return;
     setIsCapturing(true);
 
-    // Ambil data blob dari canvas
-    canvasRef.current.toBlob(async (blob) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const video = videoRef.current;
+
+    if (!ctx) {
+      setIsCapturing(false);
+      return;
+    }
+
+    const targetWidth = 790;
+    const targetHeight = 500;
+
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    const videoAspect = video.videoWidth / video.videoHeight;
+    const ktpAspect = 79 / 50;
+
+    let sx = 0,
+      sy = 0,
+      sWidth = video.videoWidth,
+      sHeight = video.videoHeight;
+
+    if (videoAspect > ktpAspect) {
+      sWidth = video.videoHeight * ktpAspect;
+      sx = (video.videoWidth - sWidth) / 2;
+    } else {
+      sHeight = video.videoWidth / ktpAspect;
+      sy = (video.videoHeight - sHeight) / 2;
+    }
+
+    ctx.drawImage(
+      video,
+      sx,
+      sy,
+      sWidth,
+      sHeight,
+      0,
+      0,
+      targetWidth,
+      targetHeight
+    );
+
+    canvas.toBlob(async (blob) => {
       if (!blob) {
         setIsCapturing(false);
         return;
       }
 
-      // Create FormData and append the image (Directly append the blob with the name and type)
+      const toBase64 = (blob: Blob): Promise<string> =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+        });
+
+      const base64 = await toBase64(blob);
+      setBase64Image(base64);
+
       const formData = new FormData();
-      formData.append("image", blob, "ktp.jpeg"); // Blob, with name as the third parameter
-      console.log(formData);
+      formData.append("image", blob, "ktp.jpeg");
+
       try {
-        // Kirim FormData ke API
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/ktp/extract`,
           {
@@ -282,46 +336,42 @@ export function KtpCapture() {
         const responseText = await response.text();
         console.log("Response from API:", responseText);
 
-        // Handle API response (success or error)
         if (response.ok) {
-          // Ambil returnApp (deep link) dari URL browser
           const urlParams = new URLSearchParams(window.location.search);
           const returnApp = urlParams.get("returnApp");
 
-          // Kalau returnApp ada, redirect ke aplikasi Expo
           if (returnApp) {
             const data = JSON.parse(responseText)?.data;
-
             const deepLink = new URL(returnApp);
-            deepLink.searchParams.set("status", "verified");
 
-            // Tambahkan data penting
+            deepLink.searchParams.set("status", "verified");
             deepLink.searchParams.set("nik", data.nik);
             deepLink.searchParams.set("nama", data.nama);
             deepLink.searchParams.set("tanggal_lahir", data.tanggal_lahir);
             deepLink.searchParams.set("tempat_lahir", data.tempat_lahir);
             deepLink.searchParams.set("jenis_kelamin", data.jenis_kelamin);
-            // Tambahkan field lain jika perlu
 
-            console.log("Redirecting to Expo app:", deepLink.toString());
+            if (base64) {
+              deepLink.searchParams.set("foto_ktp", encodeURIComponent(base64));
+            }
+
+            console.log("Deep link URL:", deepLink.toString());
             window.location.href = deepLink.toString();
           } else {
-            // Kalau tidak ada, fallback ke halaman sukses
             window.location.href = "/ktp-success";
           }
         } else {
           throw new Error("Upload failed: " + responseText);
         }
-        console.log(returnApp);
       } catch (error) {
         console.error("Error during KTP capture:", error);
         setErrorMessage("Gagal mengunggah KTP. Silakan coba lagi.");
-        setIsCapturing(false); // Reset status ketika error
+      } finally {
+        setIsCapturing(false);
       }
     }, "image/jpeg");
   };
 
-  // Function to manually request camera access if it wasn't granted automatically
   const handleManualCameraRequest = () => {
     requestCameraAccess();
   };
