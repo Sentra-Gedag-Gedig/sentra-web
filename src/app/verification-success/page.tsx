@@ -102,14 +102,9 @@ export default function VerificationSuccessPage() {
         {/* Return button */}
         <Button
           onClick={handleReturnClick}
-          className="w-full max-w-xs bg-[#1E1699] hover:bg-[#161271] text-white font-medium py-3 px-4 rounded-full">
+          className="w-full max-w-xs bg-[#1E1699] hover:bg-[#161271] text-white font-medium py-3 px-4 rounded-lg">
           Kembali ke Beranda
         </Button>
-      </div>
-
-      {/* Bottom indicator */}
-      <div className="w-full flex justify-center py-3">
-        <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
       </div>
     </div>
   );

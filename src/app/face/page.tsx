@@ -145,6 +145,7 @@ export default function FacePositioningPage() {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const ws = new WebSocket("ws://localhost:5050/api/v1/face/ws");
     wsRef.current = ws;
 
