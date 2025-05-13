@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -10,16 +9,13 @@ interface KtpPositionResponse {
 }
 
 export function KtpCapture() {
-  const router = useRouter();
   const [message, setMessage] = useState<string>("KTP tidak terdeteksi");
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
   const [returnApp, setReturnApp] = useState<string | null>(null);
   const [lastInstructionTime, setLastInstructionTime] = useState<number>(0);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-  const [captureSuccess, setCaptureSuccess] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [hasCameraPermission, setHasCameraPermission] =
     useState<boolean>(false);
@@ -185,10 +181,8 @@ export function KtpCapture() {
           // Check if KTP is in correct position
           if (result.message === "OK") {
             setIsAnalyzing(false);
-            setCaptureSuccess(true);
           } else {
             setIsAnalyzing(true);
-            setCaptureSuccess(false);
           }
 
           // Speak the instructions
