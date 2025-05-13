@@ -294,12 +294,14 @@ export function KtpCapture() {
         </h1>
       </div>
 
+      {/* Tambahkan div dengan fixed height untuk mencegah pergeseran saat pesan berubah */}
       <div
-        className="relative z-10 text-base md:text-lg text-center mb-6 min-h-[4.5rem]"
+        className="relative z-10 h-16 flex flex-col items-center justify-center mb-6"
         aria-live="assertive"
-        aria-relevant="all"
-      >
-        <p>{getInstructionText()}</p>
+        aria-relevant="all">
+        <p className="text-base md:text-lg text-center">
+          {getInstructionText()}
+        </p>
         {isAnalyzing && isConnected && hasCameraPermission && (
           <div className="flex items-center justify-center mt-2">
             <span>Analyzing...</span>
@@ -320,11 +322,11 @@ export function KtpCapture() {
         </div>
       )}
 
+      {/* Turunkan placeholder KTP sebanyak 9px dengan menambahkan mt-24 (ganti dari mt-20) */}
       <div
-        className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
-        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini"
-      >
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
+        className="relative z-10 max-w-md aspect-video rounded-lg border-2 border-[#00027d] overflow-hidden mt-24"
+        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
 
       <div className="relative z-10 mt-6 max-w-sm w-full mx-auto">
