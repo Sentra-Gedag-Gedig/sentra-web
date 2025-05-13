@@ -284,14 +284,30 @@ export function KtpCapture() {
 
         // Handle API response (success or error)
         if (response.ok) {
-          // Redirect ke halaman sukses jika berhasil
-          let successUrl = "http://localhost:3000/ktp-success";
-          if (returnApp) {
-            successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
-          }
+          // Ambil returnApp (deep link) dari URL browser
+          const urlParams = new URLSearchParams(window.location.search);
+          const returnApp = urlParams.get("returnApp");
 
-          console.log("Redirecting to:", successUrl);
-          window.location.href = successUrl; // Hanya berlaku di browser
+          // Kalau returnApp ada, redirect ke aplikasi Expo
+          if (returnApp) {
+            const data = JSON.parse(responseText)?.data;
+
+            const deepLink = new URL(returnApp);
+            deepLink.searchParams.set("status", "verified");
+
+            // Tambahkan data penting
+            deepLink.searchParams.set("nik", data.nik);
+            deepLink.searchParams.set("nama", data.nama);
+            deepLink.searchParams.set("tanggal_lahir", data.tanggal_lahir);
+            deepLink.searchParams.set("jenis_kelamin", data.jenis_kelamin);
+            // Tambahkan field lain jika perlu
+
+            console.log("Redirecting to Expo app:", deepLink.toString());
+            window.location.href = deepLink.toString();
+          } else {
+            // Kalau tidak ada, fallback ke halaman sukses
+            window.location.href = "/ktp-success";
+          }
         } else {
           throw new Error("Upload failed: " + responseText);
         }
@@ -322,14 +338,16 @@ export function KtpCapture() {
       <div className="relative z-10 flex items-center justify-center mb-4">
         <h1
           className="text-xl md:text-2xl font-bold text-center"
-          aria-label="Halaman pengambilan foto e-KTP">
+          aria-label="Halaman pengambilan foto e-KTP"
+        >
           Ambil foto e-KTP
         </h1>
       </div>
       <div
         className="relative z-10 h-16 flex flex-col items-center justify-center mb-6"
         aria-live="assertive"
-        aria-relevant="all">
+        aria-relevant="all"
+      >
         <p className="text-base md:text-lg text-center">
           {getInstructionText()}
         </p>
@@ -345,14 +363,16 @@ export function KtpCapture() {
           <Button
             className="w-full h-12 text-base bg-green-600 hover:bg-green-700 text-white rounded-lg"
             onClick={handleManualCameraRequest}
-            aria-label="Berikan izin kamera">
+            aria-label="Berikan izin kamera"
+          >
             Berikan Izin Kamera
           </Button>
         </div>
       )}
       <div
         className="relative z-10 max-w-sm aspect-[79/50] rounded-lg border-2 border-[#00027d] overflow-hidden mt-20 mx-auto flex items-center justify-center"
-        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini">
+        aria-label="Area penempatan KTP, posisikan KTP Anda di dalam kotak ini"
+      >
         <div className="absolute right-6 top-1/2 -translate-y-1/2 w-18 h-28 border-2 border-[#00027d] rounded" />
       </div>
 
@@ -361,7 +381,8 @@ export function KtpCapture() {
           className="w-full h-12 text-base bg-[#00027d] hover:bg-[#1f2ddc] text-white rounded-lg"
           onClick={captureKtp}
           disabled={!hasCameraPermission || isCapturing}
-          aria-label="Tombol untuk mengambil foto KTP ketika posisi sudah tepat">
+          aria-label="Tombol untuk mengambil foto KTP ketika posisi sudah tepat"
+        >
           {isCapturing ? (
             <span className="flex items-center justify-center">
               <span>Memproses...</span>
