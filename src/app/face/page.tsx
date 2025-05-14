@@ -68,30 +68,14 @@ export default function FacePositioningPage() {
         const returnApp = urlParams.get("returnApp");
 
         if (returnApp) {
-          try {
-            console.log(
-              "Redirecting directly to mobile app with returnApp:",
-              returnApp
-            );
-            const deepLink = new URL(returnApp);
-            deepLink.searchParams.set("status", "verified");
+          const deepLink = new URL(returnApp);
+          deepLink.searchParams.set("status", "verified");
 
-            console.log("Executing redirect to:", deepLink.toString());
-            window.location.href = deepLink.toString();
-          } catch (error) {
-            console.error("Error parsing URL:", error);
-            // Fallback for invalid URL format
-            const separator = returnApp.includes("?") ? "&" : "?";
-            const fallbackUrl = `${returnApp}${separator}status=verified`;
-
-            console.log("Executing fallback redirect to:", fallbackUrl);
-            window.location.href = fallbackUrl;
-          }
+          console.log("Executing redirect to:", deepLink.toString());
+          window.location.href = deepLink.toString();
         } else {
           // If no return app, go to success page
-          setTimeout(() => {
-            window.location.href = "/verification-success";
-          }, 1000);
+          window.location.href = "/verification-success";
         }
         break;
 
