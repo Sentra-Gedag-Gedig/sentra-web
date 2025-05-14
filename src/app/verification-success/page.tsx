@@ -32,32 +32,6 @@ export default function VerificationSuccessPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Status bar mockup */}
-      <div className="bg-gray-100 py-2 px-4 flex justify-between items-center">
-        <div className="text-sm font-medium">9:09</div>
-        <div className="flex items-center space-x-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-4 h-4">
-            <path
-              fillRule="evenodd"
-              d="M1.371 8.143c5.858-5.857 15.356-5.857 21.213 0a.75.75 0 0 1 0 1.061l-.53.53a.75.75 0 0 1-1.06 0c-4.95-4.95-12.99-4.95-17.94 0a.75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06zm3.182 3.182a9 9 0 0 1 12.728 0 .75.75 0 0 1 0 1.06l-.53.53a.75.75 0 0 1-1.06 0 6 6 0 0 0-8.486 0 .75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06zm3.182 3.182a3 3 0 0 1 4.243 0 .75.75 0 0 1 0 1.06l-.53.53a.75.75 0 0 1-1.06 0 .75.75 0 0 0-1.06 0 .75.75 0 0 1-1.06 0l-.53-.53a.75.75 0 0 1 0-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-4 h-4">
-            <path d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4zm16 8.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Back button */}
       <div className="px-4 py-2">
         <button
           className="p-2"

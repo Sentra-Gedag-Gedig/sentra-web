@@ -234,7 +234,7 @@ export function KtpCapture() {
         setIsSpeaking(false);
       }
     };
-  }, [isMounted]); // Depend on isMounted to ensure this only runs client-side
+  }, [isMounted]);
 
   const getInstructionText = () => {
     if (!isConnected) {
@@ -277,7 +277,7 @@ export function KtpCapture() {
     canvas.height = targetHeight;
 
     const videoAspect = video.videoWidth / video.videoHeight;
-    const ktpAspect = 79 / 50;
+    const ktpAspect = 79 / 30;
 
     let sx = 0,
       sy = 0,

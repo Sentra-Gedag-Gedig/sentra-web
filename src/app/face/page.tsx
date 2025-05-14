@@ -58,13 +58,15 @@ export default function FacePositioningPage() {
         break;
       case "READY":
         message = "Posisi wajah sudah tepat. Mohon tunggu sebentar.";
-        let successUrl = "http://localhost:3000/verification-success";
+        let successUrl = "/verification-success";
         if (returnApp) {
           successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
         }
 
         console.log("Redirecting to:", successUrl);
-        window.location.href = successUrl;
+        setTimeout(() => {
+          window.location.href = successUrl;
+        }, 4000);
         break;
       case "ADJUST":
         if (instructions.length > 0) {
@@ -139,7 +141,7 @@ export default function FacePositioningPage() {
       }
     }
 
-    frameIntervalRef.current = setTimeout(sendFrames, 1500);
+    frameIntervalRef.current = setTimeout(sendFrames, 6000);
   };
 
   useEffect(() => {
@@ -261,6 +263,10 @@ export default function FacePositioningPage() {
     return "Memposisikan wajah...";
   };
 
+  // Determine the border color based on status
+  const circleBorderColor =
+    status === "READY" ? "border-green-500" : "border-blue-400";
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-900 text-white">
       {/* Header */}
@@ -309,8 +315,9 @@ export default function FacePositioningPage() {
           {/* Hidden canvas for processing video frames */}
           <canvas ref={canvasRef} className="hidden" />
 
-          {/* Circle overlay */}
-          <div className="absolute inset-0 rounded-full border-4 border-blue-400 overflow-hidden">
+          {/* Circle overlay with dynamic border color */}
+          <div
+            className={`absolute inset-0 rounded-full border-4 ${circleBorderColor} overflow-hidden transition-colors duration-300`}>
             {!isConnected && (
               <div className="w-full h-full bg-gray-700 flex items-center justify-center">
                 {errorMessage ? (
@@ -327,7 +334,12 @@ export default function FacePositioningPage() {
 
         {/* Status text */}
         <div className="w-full max-w-md text-center mb-10">
-          <h2 className="text-xl font-medium mb-2">{getInstructionText()}</h2>
+          <h2
+            className={`text-xl font-medium mb-2 ${
+              status === "READY" ? "text-green-400" : ""
+            }`}>
+            {getInstructionText()}
+          </h2>
           <div className="flex items-center justify-center text-sm text-gray-300">
             {isAnalyzing && isConnected && (
               <>
@@ -341,7 +353,9 @@ export default function FacePositioningPage() {
         {/* Progress indicator */}
         <div className="w-full max-w-md bg-gray-700 rounded-full h-1">
           <div
-            className="bg-blue-500 h-1 rounded-full transition-all duration-300"
+            className={`h-1 rounded-full transition-all duration-300 ${
+              status === "READY" ? "bg-green-500" : "bg-blue-500"
+            }`}
             style={{
               width: !isConnected ? "0%" : status === "READY" ? "100%" : "30%",
             }}
