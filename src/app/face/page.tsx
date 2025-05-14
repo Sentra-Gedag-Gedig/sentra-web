@@ -80,20 +80,16 @@ export default function FacePositioningPage() {
 
             // No need for other data parameters for face detection
 
-            setTimeout(() => {
-              console.log("Executing redirect to:", deepLink.toString());
-              window.location.href = deepLink.toString();
-            }, 1000);
+            console.log("Executing redirect to:", deepLink.toString());
+            window.location.href = deepLink.toString();
           } catch (error) {
             console.error("Error parsing URL:", error);
             // Fallback for invalid URL format
             const separator = returnApp.includes("?") ? "&" : "?";
             const fallbackUrl = `${returnApp}${separator}status=verified`;
 
-            setTimeout(() => {
-              console.log("Executing fallback redirect to:", fallbackUrl);
-              window.location.href = fallbackUrl;
-            }, 1000);
+            console.log("Executing fallback redirect to:", fallbackUrl);
+            window.location.href = fallbackUrl;
           }
         } else {
           // If no return app, go to success page
