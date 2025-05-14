@@ -369,6 +369,25 @@ export function KtpCapture() {
       } finally {
         setIsCapturing(false);
       }
+
+      if (wsRef.current) {
+        wsRef.current.close();
+        console.log("WebSocket connection closed.");
+      }
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        console.log("Camera stream stopped.");
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        console.log("WebSocket connection closed.");
+      }
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        console.log("Camera stream stopped.");
+      }
     }, "image/jpeg");
   };
 
