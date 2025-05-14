@@ -271,13 +271,13 @@ export function KtpCapture() {
     }
 
     const targetWidth = 790;
-    const targetHeight = 400;
+    const targetHeight = 550;
 
     canvas.width = targetWidth;
     canvas.height = targetHeight;
 
     const videoAspect = video.videoWidth / video.videoHeight;
-    const ktpAspect = 79 / 40;
+    const ktpAspect = 79 / 55;
 
     let sx = 0,
       sy = 0,
