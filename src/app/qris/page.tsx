@@ -384,7 +384,7 @@ export default function QrisCapture() {
 
       {/* QR Scanner Frame */}
       <div
-        className="relative z-10 w-full aspect-square mx-auto flex items-center justify-center"
+        className="relative z-10 w-full mx-auto flex items-center justify-center"
         aria-label="Area pemindaian QRIS, posisikan kode QR di dalam kotak ini">
         <div className="relative w-64 h-64">
           {/* Corner Elements */}

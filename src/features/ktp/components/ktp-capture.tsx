@@ -271,7 +271,7 @@ export function KtpCapture() {
     }
 
     const targetWidth = 790;
-    const targetHeight = 500;
+    const targetHeight = 700;
 
     canvas.width = targetWidth;
     canvas.height = targetHeight;
