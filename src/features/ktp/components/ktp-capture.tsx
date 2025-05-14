@@ -109,15 +109,15 @@ export function KtpCapture() {
       setLastInstructionTime(now);
       setIsSpeaking(true);
 
-      const utterance = new SpeechSynthesisUtterance(message);
-      utterance.lang = "id-ID";
-      utterance.rate = 1.0;
+      // const utterance = new SpeechSynthesisUtterance(message);
+      // utterance.lang = "id-ID";
+      // utterance.rate = 1.0;
 
-      utterance.onend = () => {
-        setIsSpeaking(false);
-      };
+      // utterance.onend = () => {
+      //   setIsSpeaking(false);
+      // };
 
-      window.speechSynthesis.speak(utterance);
+      // window.speechSynthesis.speak(utterance);
     }
   };
 
