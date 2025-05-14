@@ -9,6 +9,7 @@ import ekyc from "../../../public/ekyc.svg";
 export default function VerificationSuccessPage() {
   const router = useRouter();
   const [returnApp, setReturnApp] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState<boolean>(false);
 
   useEffect(() => {
     // Get URL parameters
@@ -17,12 +18,21 @@ export default function VerificationSuccessPage() {
 
     if (returnTo) {
       setReturnApp(returnTo);
+
+      // Set a brief delay to show the success page before redirecting
+      const timer = setTimeout(() => {
+        setRedirecting(true);
+        window.location.href = returnTo;
+      }, 2000); // 2 second delay before automatically redirecting
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
   const handleReturnClick = () => {
     if (returnApp) {
       // Redirect back to the mobile app using the deep link
+      setRedirecting(true);
       window.location.href = returnApp;
     } else {
       // Fallback to home page if no return URL is specified
@@ -58,7 +68,6 @@ export default function VerificationSuccessPage() {
         {/* Illustration */}
         <div className="w-full max-w-xs mb-4">
           <div className="relative w-full aspect-video">
-            {/* Placeholder for the KYC illustration */}
             <Image src={ekyc} alt="e-kyc" />
           </div>
         </div>
@@ -72,6 +81,13 @@ export default function VerificationSuccessPage() {
           Kamu telah berhasil memverifikasi diri kamu! Selamat datang dan segera
           lihat apa yang bisa kamu lakukan di Sentra!
         </p>
+
+        {/* Redirect message */}
+        {redirecting && returnApp && (
+          <p className="text-center text-gray-500 mb-4">
+            Mengarahkan kembali ke aplikasi...
+          </p>
+        )}
 
         {/* Return button */}
         <Button
