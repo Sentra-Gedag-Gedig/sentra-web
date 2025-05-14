@@ -63,12 +63,10 @@ export default function FacePositioningPage() {
       case "READY":
         message = "Posisi wajah sudah tepat. Mohon tunggu sebentar.";
 
-        // Cancel speech synthesis
-        window.speechSynthesis.cancel();
-
-        // Directly redirect to mobile app like KTP detection
+        // Directly redirect to mobile app like KTP detection without waiting for speech synthesis
         const urlParams = new URLSearchParams(window.location.search);
         const returnApp = urlParams.get("returnApp");
+
         if (returnApp) {
           try {
             console.log(
@@ -77,8 +75,6 @@ export default function FacePositioningPage() {
             );
             const deepLink = new URL(returnApp);
             deepLink.searchParams.set("status", "verified");
-
-            // No need for other data parameters for face detection
 
             console.log("Executing redirect to:", deepLink.toString());
             window.location.href = deepLink.toString();
@@ -98,6 +94,7 @@ export default function FacePositioningPage() {
           }, 1000);
         }
         break;
+
       case "ADJUST":
         if (instructions.length > 0) {
           const directionText = instructions
