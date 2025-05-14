@@ -60,13 +60,13 @@ export default function FacePositioningPage() {
         message = "Posisi wajah sudah tepat. Mohon tunggu sebentar.";
         let successUrl = "/verification-success";
         if (returnApp) {
-          successUrl += `?returnTo=${encodeURIComponent(returnApp)}`;
+          successUrl += `?returnApp=${encodeURIComponent(returnApp)}`;
         }
 
         console.log("Redirecting to:", successUrl);
         setTimeout(() => {
           window.location.href = successUrl;
-        }, 4000);
+        }, 3000);
         break;
       case "ADJUST":
         if (instructions.length > 0) {
@@ -141,7 +141,7 @@ export default function FacePositioningPage() {
       }
     }
 
-    frameIntervalRef.current = setTimeout(sendFrames, 6000);
+    frameIntervalRef.current = setTimeout(sendFrames, 4500);
   };
 
   useEffect(() => {

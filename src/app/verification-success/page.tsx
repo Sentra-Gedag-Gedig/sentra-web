@@ -14,15 +14,15 @@ export default function VerificationSuccessPage() {
   useEffect(() => {
     // Get URL parameters
     const params = new URLSearchParams(window.location.search);
-    const returnTo = params.get("returnTo");
+    const returnApp = params.get("returnApp");
 
-    if (returnTo) {
-      setReturnApp(returnTo);
+    if (returnApp) {
+      setReturnApp(returnApp);
 
       // Set a brief delay to show the success page before redirecting
       const timer = setTimeout(() => {
         setRedirecting(true);
-        window.location.href = returnTo;
+        //window.location.href = returnApp;
       }, 2000); // 2 second delay before automatically redirecting
 
       return () => clearTimeout(timer);
@@ -31,9 +31,23 @@ export default function VerificationSuccessPage() {
 
   const handleReturnClick = () => {
     if (returnApp) {
-      // Redirect back to the mobile app using the deep link
-      setRedirecting(true);
-      window.location.href = returnApp;
+      // Create a deep link similar to KTP implementation
+      try {
+        const deepLink = new URL(returnApp);
+
+        // Add parameters that the mobile app might need
+        deepLink.searchParams.set("status", "verified");
+        // You can add other user data here if needed
+
+        // Redirect back to the mobile app
+        setRedirecting(true);
+        console.log("Redirecting to mobile app:", deepLink.toString());
+        window.location.href = deepLink.toString();
+      } catch (error) {
+        console.error("Invalid URL format:", error);
+        // Fallback in case URL parsing fails
+        window.location.href = returnApp;
+      }
     } else {
       // Fallback to home page if no return URL is specified
       router.push("/");
