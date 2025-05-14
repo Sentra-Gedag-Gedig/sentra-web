@@ -31,25 +31,26 @@ export default function VerificationSuccessPage() {
 
   const handleReturnClick = () => {
     if (returnApp) {
-      // Create a deep link similar to KTP implementation
       try {
+        // First try to parse it as a URL
         const deepLink = new URL(returnApp);
 
-        // Add parameters that the mobile app might need
+        // If we got here, it's a valid URL, so add the parameter
         deepLink.searchParams.set("status", "verified");
-        // You can add other user data here if needed
-
-        // Redirect back to the mobile app
         setRedirecting(true);
         console.log("Redirecting to mobile app:", deepLink.toString());
         window.location.href = deepLink.toString();
       } catch (error) {
-        console.error("Invalid URL format:", error);
-        // Fallback in case URL parsing fails
-        window.location.href = returnApp;
+        console.error("Invalid URL format, using direct redirect:", error);
+
+        // If URL parsing fails, just append the parameter manually
+        const separator = returnApp.includes("?") ? "&" : "?";
+        const fallbackUrl = `${returnApp}${separator}status=verified`;
+
+        console.log("Fallback redirect URL:", fallbackUrl);
+        window.location.href = fallbackUrl;
       }
     } else {
-      // Fallback to home page if no return URL is specified
       router.push("/");
     }
   };

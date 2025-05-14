@@ -23,10 +23,10 @@ export default function FacePositioningPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const returnTo = params.get("returnTo");
+    const returnApp = params.get("returnApp");
 
-    if (returnTo) {
-      setReturnApp(returnTo);
+    if (returnApp) {
+      setReturnApp(returnApp);
     }
   }, []);
 
