@@ -22,6 +22,8 @@ export default function FacePositioningPage() {
   const [returnApp, setReturnApp] = useState<string | null>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const params = new URLSearchParams(window.location.search);
     const returnApp = params.get("returnApp");
 
@@ -50,6 +52,7 @@ export default function FacePositioningPage() {
     window.speechSynthesis.cancel();
 
     let message = "";
+    console.log(returnApp);
 
     switch (status) {
       case "NO_FACE":
@@ -64,6 +67,8 @@ export default function FacePositioningPage() {
         window.speechSynthesis.cancel();
 
         // Directly redirect to mobile app like KTP detection
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnApp = urlParams.get("returnApp");
         if (returnApp) {
           try {
             console.log(
