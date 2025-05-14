@@ -56,17 +56,46 @@ export default function FacePositioningPage() {
         message =
           "Wajah tidak terdeteksi. Mohon posisikan wajah Anda di depan kamera.";
         break;
+      // In speakInstructions function, READY case
       case "READY":
         message = "Posisi wajah sudah tepat. Mohon tunggu sebentar.";
-        let successUrl = "/verification-success";
-        if (returnApp) {
-          successUrl += `?returnApp=${encodeURIComponent(returnApp)}`;
-        }
 
-        console.log("Redirecting to:", successUrl);
-        setTimeout(() => {
-          window.location.href = successUrl;
-        }, 3000);
+        // Cancel speech synthesis
+        window.speechSynthesis.cancel();
+
+        // Directly redirect to mobile app like KTP detection
+        if (returnApp) {
+          try {
+            console.log(
+              "Redirecting directly to mobile app with returnApp:",
+              returnApp
+            );
+            const deepLink = new URL(returnApp);
+            deepLink.searchParams.set("status", "verified");
+
+            // No need for other data parameters for face detection
+
+            setTimeout(() => {
+              console.log("Executing redirect to:", deepLink.toString());
+              window.location.href = deepLink.toString();
+            }, 1000);
+          } catch (error) {
+            console.error("Error parsing URL:", error);
+            // Fallback for invalid URL format
+            const separator = returnApp.includes("?") ? "&" : "?";
+            const fallbackUrl = `${returnApp}${separator}status=verified`;
+
+            setTimeout(() => {
+              console.log("Executing fallback redirect to:", fallbackUrl);
+              window.location.href = fallbackUrl;
+            }, 1000);
+          }
+        } else {
+          // If no return app, go to success page
+          setTimeout(() => {
+            window.location.href = "/verification-success";
+          }, 1000);
+        }
         break;
       case "ADJUST":
         if (instructions.length > 0) {
