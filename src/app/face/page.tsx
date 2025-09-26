@@ -111,15 +111,15 @@ export default function FacePositioningPage() {
       setLastInstructionTime(now);
       setIsSpeaking(true);
 
-      // const utterance = new SpeechSynthesisUtterance(message);
-      // utterance.lang = "id-ID";
-      // utterance.rate = 1.0;
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = "id-ID";
+      utterance.rate = 1.0;
 
-      // utterance.onend = () => {
-      //   setIsSpeaking(false);
-      // };
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
 
-      // window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(utterance);
     }
   };
 
@@ -285,14 +285,16 @@ export default function FacePositioningPage() {
         <button
           className="p-2"
           onClick={() => router.back()}
-          aria-label="Kembali">
+          aria-label="Kembali"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={2}
             stroke="currentColor"
-            className="w-6 h-6">
+            className="w-6 h-6"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -328,7 +330,8 @@ export default function FacePositioningPage() {
 
           {/* Circle overlay with dynamic border color */}
           <div
-            className={`absolute inset-0 rounded-full border-4 ${circleBorderColor} overflow-hidden transition-colors duration-300`}>
+            className={`absolute inset-0 rounded-full border-4 ${circleBorderColor} overflow-hidden transition-colors duration-300`}
+          >
             {!isConnected && (
               <div className="w-full h-full bg-gray-700 flex items-center justify-center">
                 {errorMessage ? (
@@ -348,7 +351,8 @@ export default function FacePositioningPage() {
           <h2
             className={`text-xl font-medium mb-2 ${
               status === "READY" ? "text-green-400" : ""
-            }`}>
+            }`}
+          >
             {getInstructionText()}
           </h2>
           <div className="flex items-center justify-center text-sm text-gray-300">
